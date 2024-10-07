@@ -8,8 +8,8 @@ ser = serial.Serial('COM5', 9600, timeout=1)
 # Allow some time for the connection to establish
 time.sleep(2)
 
-# Initialize an empty list to store weights
-weights = []
+# Initialize an empty list to store ADC values and timestamps
+adc_values_with_timestamps = []
 
 try:
     while True:
@@ -21,15 +21,18 @@ try:
             values = line.split(',')
             
             # Ensure there are enough values before accessing them
-            if len(values) >= 5:
-                # Extract the weight
-                weight = float(values[1])
+            if len(values) >= 4:
+                # Extract the ADC value
+                adc_value = int(values[3])
                 
-                # Append the weight to the list
-                weights.append(weight)
+                # Get the current timestamp
+                timestamp = time.time()
+                
+                # Append the ADC value and timestamp to the list
+                adc_values_with_timestamps.append((timestamp, adc_value))
                 
                 # Print the extracted values
-                print(f"Weight: {weight} {values[2]}")
+                print(f"Timestamp: {timestamp}, ADC Value: {adc_value}")
             else:
                 print(f"Unexpected data format: {line}")
         
@@ -37,13 +40,13 @@ try:
         time.sleep(0.1)
 
 except KeyboardInterrupt:
-    # Convert the list of weights to a NumPy array
-    weights_array = np.array(weights)
+    # Convert the list of ADC values and timestamps to a NumPy array
+    adc_values_array = np.array(adc_values_with_timestamps, dtype=[('timestamp', 'f8'), ('adc_value', 'i4')])
     
     # Save the NumPy array to a file
-    np.save('weights.npy', weights_array)
+    np.save('adc_values_with_timestamps.npy', adc_values_array)
     
     # Close the serial connection when the script is interrupted
     ser.close()
     print("Serial connection closed.")
-    print(f"Saved weights to 'weights.npy'.")
+    print(f"Saved ADC values with timestamps to 'adc_values_with_timestamps.npy'.")

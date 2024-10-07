@@ -3,19 +3,23 @@ import plotly.graph_objs as go
 import plotly.io as pio
 
 # Load the NumPy array from the file
-weights_array = np.load('weights.npy')
+adc_values_array = np.load('adc_values_with_timestamps.npy')
+
+# Extract timestamps and ADC values
+timestamps = adc_values_array['timestamp']
+adc_values = adc_values_array['adc_value']
 
 # Create a Plotly figure
 fig = go.Figure()
 
-# Add a trace for the weights
-fig.add_trace(go.Scatter(y=weights_array, mode='lines', name='Weight'))
+# Add a trace for the ADC values
+fig.add_trace(go.Scatter(x=timestamps, y=adc_values, mode='lines', name='ADC Value'))
 
 # Set the title and labels
 fig.update_layout(
-    title='Weight Data Over Time',
+    title='ADC Values Over Time',
     xaxis_title='Time',
-    yaxis_title='Weight (kg)'
+    yaxis_title='ADC Value'
 )
 
 # Show the plot
