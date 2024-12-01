@@ -1,0 +1,5 @@
+ADC: 60563, Temperature: 21.37
+ADC: 60766, Temperature: 21.31
+ADC: 60963, Temperature: 21.31
+ADC: 60707, Temperature: 21.31
+ADC: 60309, Temperature: 21.31
