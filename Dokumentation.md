@@ -17,3 +17,14 @@ Cable:
 1,White,--> E+ -> Red
 2,Green,--> S+ -> Green
 2,White,--> S- -> White
+
+
+
+
+https://www.scalemanufacturers.org/smastandards.htm?
+https://scalemanufacturers.org/PDF/LoadCellApplicationTestGuidelineApril2010.pdf?
+
+
+c) Trigger character: [48 / '0']
+
+0
