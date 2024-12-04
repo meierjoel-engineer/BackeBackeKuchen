@@ -4,6 +4,8 @@ import network
 import socket
 import time
 import random
+import machine
+
 
 # Configure UART for OpenScale
 uart = UART(1, baudrate=9600, tx=5, rx=6)  # TX=1, RX=3 (adjust pins as needed)
@@ -26,6 +28,8 @@ PASSWORD = '44556677'
 # Server IP and Port
 SERVER_IP = '192.168.241.218'
 SERVER_PORT = 65432
+
+sleep_duration_ms = 20_000 
 
 # Connect to Wi-Fi
 def connect_wifi():
@@ -76,7 +80,7 @@ def main():
                     connect_wifi()
                     tcp_client(msg)
                     disconnect_wifi()
-                    time.sleep(5)  # increase delay as needed
+                    machine.deepsleep(sleep_duration_ms)
             time.sleep(1)
         except Exception as e:
             print(f"Error: {e}")
