@@ -1,7 +1,7 @@
 import socket
 
 # Server IP and Port
-HOST = '192.168.241.218'  # Listen on all available interfaces
+HOST = '192.168.226.218'  # Listen on all available interfaces
 PORT = 65432              # Port to listen on
 
 def start_server():
@@ -30,6 +30,16 @@ def start_server():
 
 if __name__ == '__main__':
     start_server()
+
+
+# if data is not None:
+# parts = data.split(',')
+# if len(parts) == 6:
+#     message = f"ADC: {parts[3]}, Temperature: {parts[4]}"
+#     s.send(message.encode('utf-8'))
+#     print(f"Sent: {message}")
+
+
 #esptool --chip esp32c3 --port COM12 erase_flash
 #esptool --chip esp32c3 --port COM12 --baud 460800 write_flash -z 0x0 C:\GitRepos\BackeBackeKuchen\bin\ESP32_GENERIC_C3-20241025-v1.24.0.bin
 #ampy --port COM12 put C:\GitRepos\BackeBackeKuchen\ESP\main.py
