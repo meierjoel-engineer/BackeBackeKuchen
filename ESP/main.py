@@ -1,24 +1,18 @@
-from machine import UART  # type: ignore
-import time # type: ignore
-import network  # type: ignore
-import socket # type: ignore
+import socket
+import time
+import network
+from machine import UART
 
 # Configure UART for OpenScale
-uart = UART(1, baudrate=250_000, tx=5, rx=6)  # TX=1, RX=3 (adjust pins as needed)
+uart = UART(1, baudrate=115200, tx=5, rx=6)
 
-def read_openscale():
-    timeout = 1  # Total wait time in seconds
-    wait_interval = 0.1  # Wait interval in seconds
-    waited_time = 0  # Time waited so far
-
+def read_openscale(timeout=1, wait_interval=0.1):
+    waited_time = 0
     while waited_time < timeout:
-        if uart.any():  # Check if data is available
-            line = uart.readline()  # Read a full line
-            if line:
-                return line.decode('utf-8').strip()
+        if uart.any():
+            return uart.readline()
         time.sleep(wait_interval)
         waited_time += wait_interval
-
     return None
 
 # Wi-Fi credentials
@@ -26,8 +20,8 @@ SSID = 'RPi-Wlan'
 PASSWORD = '44556677'
 
 # Server IP and Port
-SERVER_IP = '192.168.226.218'
-SERVER_PORT = 65432
+SERVER_IP = '192.168.80.218'
+SERVER_PORT = 42069
 
 def connect():
     wlan = network.WLAN(network.STA_IF)
@@ -35,30 +29,26 @@ def connect():
     wlan.connect(SSID, PASSWORD)
     print(f"Connecting to Wi-Fi: {SSID}")
     while not wlan.isconnected():
-        print(".", end="")  # Show progress
+        print(".", end="")
         time.sleep(1)
     print("\nConnected to Wi-Fi!")
     print(f"IP Address: {wlan.ifconfig()[0]}")
-    addr_info = socket.getaddrinfo(SERVER_IP, SERVER_PORT)
-    addr = addr_info[0][-1]
+    addr = socket.getaddrinfo(SERVER_IP, SERVER_PORT)[0][-1]
     s = socket.socket()
-    print(f"Attempting to connect to server at {SERVER_IP}:{SERVER_PORT}")
     s.connect(addr)
-    print("Connected to server!")
+    print(f"Connected to server at {SERVER_IP}:{SERVER_PORT}")
     return s
 
-
-# Connect to server and send data
 def client(s):
     while True:
-        print("in loop")
-        uart.write('0')
         data = read_openscale()
-        print(f"Data: {data}")
-        s.send(data.encode('utf-8'))
+        if data:
+            print(f"Data: {data}")
+            s.send(data)
+        else:
+            print("No data received, breaking the loop")
+            break
         time.sleep(0.1)
-            
-            
 
 def main():
     s = connect()
