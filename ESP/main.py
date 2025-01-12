@@ -1,7 +1,7 @@
-from machine import UART
-import time
-import network
-import socket
+from machine import UART  # type: ignore
+import time # type: ignore
+import network  # type: ignore
+import socket # type: ignore
 
 # Configure UART for OpenScale
 uart = UART(1, baudrate=250_000, tx=5, rx=6)  # TX=1, RX=3 (adjust pins as needed)
@@ -67,4 +67,14 @@ def main():
 if __name__ == "__main__":
     main()
 
-# ampy --port COM12 put ESP\main.py
+
+
+
+# IN BOOTLOADER MODE (Press and hold BOOT button plug in USB, release BOOT button)
+# esptool --port COM12 erase_flash
+# esptool --port COM12 --baud 115200 write_flash -z 0x0 bin\ESP32_GENERIC_C3-20241025-v1.24.0.bin
+
+# IN NORMAL MODE
+# mpremote connect COM12 fs cp ESP\main.py :main.py
+
+# now reset the board, and it should run the code in main.py
